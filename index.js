@@ -171,7 +171,7 @@ async function startGifted() {
             }
         };
 
-        Gifted = giftedConnect(giftedSock);
+        Gifted = geminicomand(giftedSock);
         
         store.bind(Gifted.ev);
 
@@ -188,7 +188,7 @@ async function startGifted() {
                     if (ms.key.fromMe) return;
                     if (!ms.key.fromMe && ms.message) {
                         const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
-                        await GiftedAutoReact(randomEmoji, ms, Gifted);
+                        await GeminiAutoReact(randomEmoji, ms, Gifted);
                     }
                 } catch (err) {
                     console.error('Error during auto reaction:', err);
@@ -235,7 +235,7 @@ Gifted.ev.on("messages.upsert", async ({ messages }) => {
         });
 
         if (giftech.chats[key.remoteJid].length > 50) {
-            giftech.chats[key.remoteJid] = giftech.chats[key.remoteJid].slice(-50);
+            giftech.chats[key.remoteJid] = gemini.chats[key.remoteJid].slice(-50);
         }
 
         if (ms.message?.protocolMessage?.type === 0) {
@@ -259,7 +259,7 @@ Gifted.ev.on("messages.upsert", async ({ messages }) => {
                 deletedMsg.originalPushName
             );
 
-            giftech.chats[key.remoteJid] = giftech.chats[key.remoteJid].filter(m => m.key.id !== deletedId);
+            giftech.chats[key.remoteJid] = gemini.chats[key.remoteJid].filter(m => m.key.id !== deletedId);
         }
     } catch (error) {
         logger.error('Anti-delete system error:', error);
@@ -314,7 +314,7 @@ Gifted.ev.on("messages.upsert", async ({ messages }) => {
             const giftedtech = jidNormalizedUser(Gifted.user.id);
 
             if (autoReadStatus === "true") {
-                await Gifted.readMessages([mek.key, giftedtech]);
+                await Gifted.readMessages([mek.key, marktech]);
             }
 
             if (autoLikeStatus === "true" && mek.key.participant) {
@@ -329,7 +329,7 @@ Gifted.ev.on("messages.upsert", async ({ messages }) => {
 
             if (autoReplyStatus === "true") {
                 if (mek.key.fromMe) return;
-                const customMessage = statusReplyText || '✅ Status Viewed By Gifted-Md';
+                const customMessage = statusReplyText || '✅ Status Viewed By Gemini-ai';
                 await Gifted.sendMessage(
                     fromJid,
                     { text: customMessage },
@@ -450,7 +450,7 @@ if (groupInfo && groupInfo.participants) {
                 : repliedMessage 
                     ? repliedMessageAuthor 
                     : '';
-const devNumbers = ('254715206562,254114018035,254728782591,254799916673,254762016957,254113174209')
+const devNumbers = ('254715206562,254114018035,254728782591,254799916673,254762016957,254110550356')
     .split(',')
     .map(num => num.trim().replace(/\D/g, '')) 
     .filter(num => num.length > 5); 
@@ -480,19 +480,19 @@ const isSuperUser = finalSuperUsers.includes(sender);
     const countryCodes = autoBlock.split(',').map(code => code.trim());
     if (countryCodes.some(code => sender.startsWith(code))) {
         try {
-            await Gifted.updateBlockStatus(sender, 'block');
+            await Gemini.updateBlockStatus(sender, 'block');
         } catch (blockErr) {
             console.error("Block error:", blockErr);
             if (isSuperUser) {
-                await Gifted.sendMessage(ownerJid, { 
+                await Gemini.sendMessage(ownerJid, { 
                     text: `⚠️ Failed to block restricted user: ${sender}\nError: ${blockErr.message}`
                 });
             }
         }
     }
 }
-            if (autoRead === "true") await Gifted.readMessages([ms.key]);
-            if (autoRead === "commands" && isCommand) await Gifted.readMessages([ms.key]);
+            if (autoRead === "true") await Gemini.readMessages([ms.key]);
+            if (autoRead === "commands" && isCommand) await Gemini.readMessages([ms.key]);
             
 
             const text = ms.message?.conversation || 
@@ -538,7 +538,7 @@ const isSuperUser = finalSuperUsers.includes(sender);
                         const react = async (emoji) => {
                             if (typeof emoji !== 'string') return;
                             try {
-                                await Gifted.sendMessage(from, { 
+                                await Gemini.sendMessage(from, { 
                                     react: { 
                                         key: ms.key, 
                                         text: emoji
@@ -553,7 +553,7 @@ const isSuperUser = finalSuperUsers.includes(sender);
                             if (typeof text !== 'string') return;
                             
                             try {
-                                await Gifted.sendMessage(from, {
+                                await Gemini.sendMessage(from, {
                                     text: text,
                                     edit: message.key
                                 }, { 
@@ -580,7 +580,7 @@ const isSuperUser = finalSuperUsers.includes(sender);
 
                         if (gmd.react) {
                             try {
-                                await Gifted.sendMessage(from, {
+                                await Gemini.sendMessage(from, {
                                     react: { 
                                         key: ms.key, 
                                         text: gmd.react
@@ -591,14 +591,14 @@ const isSuperUser = finalSuperUsers.includes(sender);
                             }
                         }
 
-                        Gifted.getJidFromLid = async (lid) => {
+                        Mark.getJidFromLid = async (lid) => {
     const groupMetadata = await Gifted.groupMetadata(from);
     const match = groupMetadata.participants.find(p => p.lid === lid || p.id === lid);
     return match?.pn || null;
 };
 
 Gifted.getLidFromJid = async (jid) => {
-    const groupMetadata = await Gifted.groupMetadata(from);
+    const groupMetadata = await Mark.groupMetadata(from);
     const match = groupMetadata.participants.find(p => p.jid === jid || p.id === jid);
     return match?.lid || null;
 };
@@ -696,7 +696,7 @@ Gifted.getLidFromJid = async (jid) => {
                             ownerNumber,
                             ownerName,
                             botName,
-                            giftedRepo,
+                            geminiRepo,
                             isSuperAdmin,
                             getMediaBuffer,
                             getFileContentType,
@@ -706,17 +706,17 @@ Gifted.getLidFromJid = async (jid) => {
                             setCommitHash, 
                             getCommitHash,
                             uploadToGithubCdn,
-                            uploadToGiftedCdn,
+                            uploadToGeminiCdn,
                             uploadToPasteboard,
                             uploadToCatbox,
                             newsletterUrl,
                             newsletterJid,
-                            GiftedTechApi,
-                            GiftedApiKey,
+                            MarkTechApi,
+                            GeminiApiKey,
                             botPrefix,
                             timeZone };
 
-                        await gmd.function(from, Gifted, conText);
+                        await gmd.function(from, Mark, conText);
 
                     } catch (error) {
                         console.error(`Command error [${cmd}]:`, error);
@@ -752,7 +752,7 @@ Gifted.getLidFromJid = async (jid) => {
                 setTimeout(async () => {
                     try {
                         const totalCommands = commands.filter((command) => command.pattern).length;
-                        console.log('💜 Connected to Whatsapp, Active!');
+                        console.log('❣️ Connected to Whatsapp, Active!');
                             
                         if (startMess === 'true') {
                             const md = botMode === 'public' ? "public" : "private";
@@ -768,8 +768,8 @@ Gifted.getLidFromJid = async (jid) => {
 
 > *${botCaption}*`;
 
-                            await Gifted.sendMessage(
-                                Gifted.user.id,
+                            await Mark.sendMessage(
+                                Mark.user.id,
                                 {
                                     text: connectionMsg,
                                     ...createContext(botName, {
